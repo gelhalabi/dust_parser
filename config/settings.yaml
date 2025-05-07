@@ -1,8 +1,13 @@
 sensor:
-  host: "192.168.1.100"
-  port: 23  # Default Telnet port
+  host: "10.40.200.32"
+  port: 50003  # Port for both sensors
   read_interval: 1.0  # seconds
   timeout: 10  # seconds
+  sensors:
+    - name: "2m_sensor"
+      height: 2
+    - name: "24m_sensor"
+      height: 24
 
 logging:
   level: "INFO"

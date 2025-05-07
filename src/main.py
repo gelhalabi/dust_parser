@@ -30,6 +30,7 @@ async def main():
     client = SensorClient(
         host=config["sensor"]["host"],
         port=config["sensor"]["port"],
+        sensor_config=config["sensor"]["sensors"],
         timeout=config["sensor"]["timeout"]
     )
     
@@ -41,19 +42,23 @@ async def main():
         while True:
             raw_data = await client.read_data()
             if raw_data:
-                logging.debug(f"Raw data received: {raw_data}")
-                parsed_data = parser.parse(raw_data)
-                if parsed_data:
-                    print("\nDust Sensor Reading:")
-                    for key, value in parsed_data.items():
-                        print(f"  - {key}: {value}")
-            else:
-                logging.warning("No data received from sensor")
-                
+                data = parser.parse(raw_data)
+                if data:
+                    print("\n=== Dust Sensor Readings ===")
+                    print(f"Time: {data['timestamp']}")
+                    print("\nMT1 Values:")
+                    print(f"  Average: {data['MT1']['average']:.2f}")
+                    print(f"  Readings: {', '.join(map(str, data['MT1']['values']))}")
+                    print("\nMT2 Values:")
+                    print(f"  Average: {data['MT2']['average']:.2f}")
+                    print(f"  Readings: {', '.join(map(str, data['MT2']['values']))}")
+            
             await asyncio.sleep(config["sensor"]["read_interval"])
             
+    except KeyboardInterrupt:
+        print("\nStopping dust sensor monitoring...")
     except Exception as e:
-        logging.error(f"Critical error: {e}")
+        logging.error(f"Error: {e}")
     finally:
         await client.close()
 

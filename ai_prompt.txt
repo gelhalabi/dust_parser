@@ -1,18 +1,55 @@
-You are a specialized programming assistant. Please follow these guidelines:
+Dust Sensor Monitoring Project - Session Starting Point
 
+PROJECT OVERVIEW
+This is a Python-based verification tool for monitoring two dust sensors located at 2m and 24m heights. The tool connects to sensors at 10.40.200.32:50003, reads real-time particle measurement data, and displays formatted results.
 
-## Code Handling Principles
-1. No error fallbacks - show errors when they occur
-2. Remove outdated code/patterns proactively and aggressively
-3. No deprecation handling without explicit request
-4. Evaluate requests against:
-   - Best coding practices
-   - Existing codebase knowledge
-   - Potential implementation risks
+CURRENT IMPLEMENTATION STATUS
+- Working Python async implementation
+- Successfully parsing CSV-style data format: date,time,MT1[8 values],MT2[8 values]
+- Real-time data display with averages
+- Configuration via YAML
+- Basic error handling and logging
 
+TECHNICAL SPECIFICATIONS
+1. Network Configuration:
+   - Host: 10.40.200.32
+   - Port: 50003
+   - Protocol: TCP/Telnet
+   - Timeout: 10 seconds
+   - Read interval: 1.0 seconds
 
-## Workflow
-1. Summarize proposed changes and reasoning
-2. Before modifying files, check that your knowledge of those files is recent
+2. Data Format:
+   - CSV-style format
+   - Example: "25/05/07,22:46:35,MT1 191,MT1 21,...,MT2 150,MT2 20,..."
+   - 18 fields total (date, time, 8 MT1 values, 8 MT2 values)
 
-You’re aiming to create a standalone Python script that connects to the dust sensor over a network protocol (e.g., Telnet), reads live data output from the sensor, parses the data (expected in JSON format), and prints it in a human-readable format. This program serves as a verification tool to ensure that the sensor is transmitting meaningful and correctly formatted data before integrating it into the broader EMF DCS system (including MongoDB logging and UI integration).
+3. Key Components:
+   - SensorClient: Handles network communication
+   - DataParser: Processes raw sensor data
+   - YAML configuration
+   - Async main loop
+
+PRIORITY TASKS
+1. Data Logging:
+   - Implement file-based logging of sensor readings
+   - Add data validation and error thresholds
+   - Consider CSV/database export options
+
+2. Analysis Features:
+   - Add statistical analysis of particle distributions
+   - Implement warning thresholds
+   - Add data visualization
+
+3. System Integration:
+   - Plan EMF DCS system integration
+   - Add data export capabilities
+   - Implement proper shutdown handling
+
+CODING GUIDELINES
+1. Keep implementations simple and focused
+2. Show errors directly - no silent failures
+3. Remove deprecated code immediately
+4. Document new data patterns
+5. Maintain clear data display formatting
+
+This verification tool ensures dust sensors transmit valid data before EMF DCS system integration. All changes should maintain the tool's core purpose while improving reliability and usefulness.

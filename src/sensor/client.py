@@ -1,9 +1,9 @@
 import asyncio
 import logging
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Dict
 
 class SensorClient:
-    def __init__(self, host: str, port: int, timeout: int = 10):
+    def __init__(self, host: str, port: int, sensor_config: Dict, timeout: int = 10):
         self.host = host
         self.port = port
         self.timeout = timeout
@@ -16,14 +16,14 @@ class SensorClient:
                 asyncio.open_connection(self.host, self.port),
                 timeout=self.timeout
             )
-            logging.info(f"Connected to dust sensor at {self.host}:{self.port}")
+            logging.info(f"Connected to dust sensors at {self.host}:{self.port}")
         except Exception as e:
-            logging.error(f"Failed to connect to dust sensor: {e}")
+            logging.error(f"Failed to connect to dust sensors: {e}")
             self._connection = None
             raise
 
     async def read_data(self) -> Optional[str]:
-        """Read raw data from sensor"""
+        """Read raw data from sensors"""
         if not self._connection:
             logging.error("No active connection")
             return None
