@@ -1,0 +1,14 @@
+dust_sensor/
+├── src/
+│   ├── sensor/
+│   │   ├── __init__.py
+│   │   └── client.py          # Sensor communication logic
+│   ├── utils/
+│   │   ├── __init__.py
+│   │   └── data_parser.py     # JSON parsing utilities
+│   └── main.py                # Main script entry point
+├── tests/
+│   ├── __init__.py
+│   └── test_sensor_client.py  # Test cases
+└── config/
+    └── settings.yaml          # Configuration parameters

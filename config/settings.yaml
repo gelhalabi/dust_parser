@@ -1,0 +1,9 @@
+sensor:
+  host: "192.168.1.100"
+  port: 23  # Default Telnet port
+  read_interval: 1.0  # seconds
+  timeout: 10  # seconds
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(levelname)s - %(message)s"
