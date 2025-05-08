@@ -42,16 +42,23 @@ async def main():
         while True:
             raw_data = await client.read_data()
             if raw_data:
+                print("\n=== Raw Sensor Data ===")
+                print(f"Raw: {raw_data}")
+                print("\n=== Parsed Data ===")
+                
                 data = parser.parse(raw_data)
                 if data:
-                    print("\n=== Dust Sensor Readings ===")
                     print(f"Time: {data['timestamp']}")
+                    
                     print("\nMT1 Values:")
-                    print(f"  Average: {data['MT1']['average']:.2f}")
-                    print(f"  Readings: {', '.join(map(str, data['MT1']['values']))}")
+                    print("  Readings:")
+                    for reading in data['MT1']['readings']:
+                        print(f"    {reading['size']}: {reading['count']}")
+                    
                     print("\nMT2 Values:")
-                    print(f"  Average: {data['MT2']['average']:.2f}")
-                    print(f"  Readings: {', '.join(map(str, data['MT2']['values']))}")
+                    print("  Readings:")
+                    for reading in data['MT2']['readings']:
+                        print(f"    {reading['size']}: {reading['count']}")
             
             await asyncio.sleep(config["sensor"]["read_interval"])
             

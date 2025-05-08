@@ -3,6 +3,18 @@ import logging
 from typing import Dict, Any, Optional
 
 class DataParser:
+    # Particle size ranges in micrometers
+    PARTICLE_SIZES = [
+        "≥ 0.3 µm",
+        "≥ 0.5 µm",
+        "≥ 0.7 µm",
+        "≥ 1.0 µm",
+        "≥ 2.0 µm",
+        "≥ 3.0 µm",
+        "≥ 5.0 µm",
+        "≥ 10.0 µm"
+    ]
+
     def parse(self, raw_data: str):
         """Parse the raw sensor data into a structured format"""
         try:
@@ -20,16 +32,16 @@ class DataParser:
             mt1_readings = [int(val.replace('MT1', '').strip()) for val in parts[2:10]]
             mt2_readings = [int(val.replace('MT2', '').strip()) for val in parts[10:18]]
             
+            # Create readings with size context
+            mt1_with_size = [{"size": size, "count": count} 
+                           for size, count in zip(self.PARTICLE_SIZES, mt1_readings)]
+            mt2_with_size = [{"size": size, "count": count} 
+                           for size, count in zip(self.PARTICLE_SIZES, mt2_readings)]
+            
             return {
                 "timestamp": f"{date} {time}",
-                "MT1": {
-                    "values": mt1_readings,
-                    "average": sum(mt1_readings) / len(mt1_readings)
-                },
-                "MT2": {
-                    "values": mt2_readings,
-                    "average": sum(mt2_readings) / len(mt2_readings)
-                }
+                "MT1": {"readings": mt1_with_size},
+                "MT2": {"readings": mt2_with_size}
             }
         except Exception as e:
             return None
