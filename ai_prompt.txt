@@ -1,13 +1,13 @@
 Dust Sensor Monitoring Project - Session Starting Point
 
 PROJECT OVERVIEW
-This is a Python-based verification tool for monitoring two dust sensors located at 2m and 24m heights. The tool connects to sensors at 10.40.200.32:50003, reads real-time particle measurement data, and displays formatted results.
+This is a Python-based verification tool for monitoring two dust sensors located at 2m and 24m heights. The tool connects to sensors at 10.40.200.32:50003, reads real-time particle measurement data, and displays formatted results with particle size context.
 
 CURRENT IMPLEMENTATION STATUS
-- Working Python async implementation
-- Successfully parsing CSV-style data format: date,time,MT1[8 values],MT2[8 values]
-- Real-time data display with averages
-- Configuration via YAML
+- Working Python async implementation with Telnet connection
+- Successfully parsing CSV-style data format with particle size context
+- Clean, focused data display showing raw and parsed readings
+- YAML-based configuration
 - Basic error handling and logging
 
 TECHNICAL SPECIFICATIONS
@@ -19,31 +19,50 @@ TECHNICAL SPECIFICATIONS
    - Read interval: 1.0 seconds
 
 2. Data Format:
-   - CSV-style format
+   - CSV-style format with 18 fields:
+     * Date (YY/MM/DD)
+     * Time (HH:MM:SS)
+     * MT1 readings (8 values)
+     * MT2 readings (8 values)
    - Example: "25/05/07,22:46:35,MT1 191,MT1 21,...,MT2 150,MT2 20,..."
-   - 18 fields total (date, time, 8 MT1 values, 8 MT2 values)
 
-3. Key Components:
-   - SensorClient: Handles network communication
-   - DataParser: Processes raw sensor data
-   - YAML configuration
-   - Async main loop
+3. Particle Size Ranges:
+   P1: ≥ 0.3 µm
+   P2: ≥ 0.5 µm
+   P3: ≥ 0.7 µm
+   P4: ≥ 1.0 µm
+   P5: ≥ 2.0 µm
+   P6: ≥ 3.0 µm
+   P7: ≥ 5.0 µm
+   P8: ≥ 10.0 µm
+
+4. Key Components:
+   - SensorClient: Handles async network communication
+   - DataParser: Processes raw data with particle size context
+   - YAML configuration for sensor and logging settings
+   - Display format shows both raw data and parsed readings with size ranges
+
+LAST IMPLEMENTATION UPDATE (May 7, 2025):
+- Added particle size context to readings (0.3µm to 10.0µm ranges)
+- Removed average calculations for cleaner output
+- Improved data display format
+- Verified proper connection to both sensor heights
 
 PRIORITY TASKS
 1. Data Logging:
    - Implement file-based logging of sensor readings
-   - Add data validation and error thresholds
-   - Consider CSV/database export options
+   - Add data validation rules
+   - Consider CSV export for historical analysis
 
 2. Analysis Features:
-   - Add statistical analysis of particle distributions
-   - Implement warning thresholds
-   - Add data visualization
+   - Add particle distribution analysis
+   - Implement size-specific thresholds
+   - Consider real-time visualization
 
 3. System Integration:
    - Plan EMF DCS system integration
    - Add data export capabilities
-   - Implement proper shutdown handling
+   - Implement graceful shutdown handling
 
 CODING GUIDELINES
 1. Keep implementations simple and focused
@@ -52,4 +71,4 @@ CODING GUIDELINES
 4. Document new data patterns
 5. Maintain clear data display formatting
 
-This verification tool ensures dust sensors transmit valid data before EMF DCS system integration. All changes should maintain the tool's core purpose while improving reliability and usefulness.
+This verification tool ensures dust sensors transmit valid data before EMF DCS system integration. Development should focus on reliability and clear data presentation while maintaining the tool's verification purpose.
