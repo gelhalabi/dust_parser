@@ -8,6 +8,7 @@ Main entry point for the dust sensor monitoring tool.
 import asyncio
 import logging
 import yaml
+import os
 from sensor.client import SensorClient
 from utils.data_parser import DataParser
 
@@ -19,8 +20,13 @@ def setup_logging(config):
     )
 
 async def main():
+    # Get the absolute path to the config file
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    config_path = os.path.join(project_root, "config", "settings.yaml")
+
     # Load configuration
-    with open("config/settings.yaml", "r") as f:
+    with open(config_path, "r") as f:
         config = yaml.safe_load(f)
     
     # Setup logging
